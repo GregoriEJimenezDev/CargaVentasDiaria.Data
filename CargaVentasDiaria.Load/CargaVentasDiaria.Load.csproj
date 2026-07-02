@@ -5,6 +5,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>CargaVentasDiaria.Load</AssemblyName>
+    <RootNamespace>CargaVentasDiaria.Load</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +14,10 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CargaVentasDiaria.Data\CargaVentasDiaria.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
