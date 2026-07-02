@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CargaInventarioDiario.Data/CargaInventarioDiario.Data.csproj" />
+  <Project Path="CargaInventarioDiario.Load/CargaInventarioDiario.Load.csproj" />
+</Solution>
