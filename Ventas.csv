@@ -1,0 +1,16 @@
+NumeroOrden,Fecha,EmailCliente,Estado,NombreProducto,Cantidad,PrecioUnitario
+OR-001,2026-06-01,juan.perez@email.com,Completado,Laptop HP Pavilion,1,650.00
+OR-001,2026-06-01,juan.perez@email.com,Completado,Mouse Inalambrico Logitech,2,15.50
+OR-002,2026-06-02,maria.gomez@email.com,Pendiente,Teclado Mecanico RGB,1,45.99
+OR-003,2026-06-03,carlos.rodriguez@email.com,Completado,Monitor Samsung 24 pulgadas,1,180.00
+OR-003,2026-06-03,carlos.rodriguez@email.com,Completado,Silla Ergonomica Oficina,2,220.00
+OR-003,2026-06-03,carlos.rodriguez@email.com,Completado,Camara Web Full HD,1,35.00
+OR-004,2026-06-04,ana.martinez@email.com,Cancelado,Escritorio de Madera,1,150.00
+OR-005,2026-06-05,cliente.inexistente@email.com,Completado,Impresora Epson L3250,1,190.00
+OR-006,2026-06-06,laura.fernandez@email.com,Completado,Producto Fantasma,1,99.00
+OR-006,2026-06-06,laura.fernandez@email.com,Completado,Auriculares Bluetooth,3,28.75
+OR-007,2026-06-07,jose.ramirez@email.com,Completado,Lampara de Escritorio LED,-2,22.00
+OR-008,fecha-invalida,sofia.diaz@email.com,Completado,Pizarra Blanca,1,60.00
+OR-009,2026-06-09,miguel.torres@email.com,Completado,Auriculares Bluetooth,1,28.75
+OR-009,2026-06-09,miguel.torres@email.com,Completado,Auriculares Bluetooth,1,28.75
+OR-010,2026-06-10,elena.castillo@email.com,Completado,Mesa de Conferencia,1,-300.00

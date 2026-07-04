@@ -1,6 +1,8 @@
 using CargaVentasDiaria.Data.Context;
 using CargaVentasDiaria.Data.Interfaces;
 using CargaVentasDiaria.Data.Services;
+using CargaVentasDiaria.Load.Interfaces;
+using CargaVentasDiaria.Load.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,23 +16,28 @@ internal class Program
         try
         {
             var config = CrearConfiguracion();
-            var rutaCsv = ObtenerRutaCsv(config);
             var provider = ConfigurarServicios(config);
+            var rutas = config.GetSection("RutasCsv");
 
-            var lector = new CsvReaderService(new ValidadorVentaCsv());
-            var (validos, erroresLectura) = lector.Leer(rutaCsv);
+            using (var scope = provider.CreateScope())
+            {
+                var ctx = scope.ServiceProvider.GetRequiredService<DbVentasContext>();
+                await ctx.Database.EnsureCreatedAsync();
+            }
 
-            using var scope = provider.CreateScope();
-            var processor = scope.ServiceProvider.GetRequiredService<VentaProcessor>();
-            var (insertados, erroresProceso) = await processor.ProcesarAsync(validos);
+            var csvReader = new CsvReaderService();
+            var metrics = new EtlMetrics();
 
-            ImprimirResumen(validos.Count + erroresLectura.Count, insertados, erroresLectura, erroresProceso);
+            await new ProductoEtlPhase(csvReader, metrics).ExecuteAsync(provider, rutas["Productos"]!);
+            await new ClienteEtlPhase(csvReader, metrics).ExecuteAsync(provider, rutas["Clientes"]!);
+            await new VentaEtlPhase(csvReader, metrics).ExecuteAsync(provider, rutas["Ventas"]!);
 
+            metrics.ImprimirResumen();
             return 0;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"ERROR: {ex.Message}");
+            Console.WriteLine($"ERROR FATAL: {ex.Message}");
             return 1;
         }
     }
@@ -43,17 +50,6 @@ internal class Program
             .Build();
     }
 
-    private static string ObtenerRutaCsv(IConfiguration config)
-    {
-        var ruta = config["CsvSettings:RutaArchivo"]
-            ?? throw new InvalidOperationException("CsvSettings:RutaArchivo no está configurado.");
-
-        if (!File.Exists(ruta))
-            throw new InvalidOperationException($"No se encuentra el archivo CSV en: {ruta}");
-
-        return ruta;
-    }
-
     private static ServiceProvider ConfigurarServicios(IConfiguration config)
     {
         var services = new ServiceCollection();
@@ -61,38 +57,15 @@ internal class Program
             ?? throw new InvalidOperationException("ConnectionStrings:VentasDb no está configurado.");
 
         services.AddDbContext<DbVentasContext>(options => options.UseSqlServer(connectionString));
-        services.AddScoped<IClienteService, ClienteService>();
-        services.AddScoped<ICategoriaService, CategoriaService>();
-        services.AddScoped<IProductoService, ProductoService>();
-        services.AddScoped<IVentaService, VentaService>();
-        services.AddScoped<VentaProcessor>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<ICountryService, CountryService>();
+        services.AddScoped<ICityService, CityService>();
+        services.AddScoped<IOrderStatusService, OrderStatusService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IOrderDetailService, OrderDetailService>();
 
         return services.BuildServiceProvider();
-    }
-
-    private static void ImprimirResumen(
-        int totalLeidos, int insertados,
-        List<(int Fila, string Error)> erroresLectura,
-        List<(int Fila, string Motivo)> erroresProceso)
-    {
-        Console.WriteLine();
-        Console.WriteLine("===== RESUMEN =====");
-        Console.WriteLine($"Leídos:     {totalLeidos}");
-        Console.WriteLine($"Insertados: {insertados}");
-        Console.WriteLine($"Rechazados: {erroresLectura.Count + erroresProceso.Count}");
-
-        if (erroresLectura.Count > 0)
-        {
-            Console.WriteLine("Errores de validación:");
-            for (int i = 0; i < erroresLectura.Count; i++)
-                Console.WriteLine($"  Fila {erroresLectura[i].Fila}: {erroresLectura[i].Error}");
-        }
-
-        if (erroresProceso.Count > 0)
-        {
-            Console.WriteLine("Errores de proceso:");
-            for (int i = 0; i < erroresProceso.Count; i++)
-                Console.WriteLine($"  Fila {erroresProceso[i].Fila}: {erroresProceso[i].Motivo}");
-        }
     }
 }

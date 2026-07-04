@@ -5,14 +5,16 @@ namespace CargaVentasDiaria.Data.Context;
 
 public class DbVentasContext : DbContext
 {
-    public DbVentasContext(DbContextOptions<DbVentasContext> options) : base(options)
-    {
-    }
+    public DbVentasContext(DbContextOptions<DbVentasContext> options) : base(options) { }
 
-    public DbSet<Cliente> Clientes => Set<Cliente>();
-    public DbSet<Categoria> Categorias => Set<Categoria>();
-    public DbSet<Producto> Productos => Set<Producto>();
-    public DbSet<Venta> Ventas => Set<Venta>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<Country> Countries => Set<Country>();
+    public DbSet<City> Cities => Set<City>();
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<OrderStatus> OrderStatuses => Set<OrderStatus>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
