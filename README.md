@@ -1,18 +1,6 @@
 # CargaVentasDiaria - Proceso ETL de Carga Transaccional
 
 
-
-## Información del proyecto
-
-| Campo | Valor |
-|---|---|
-| Estudiante | Gregori Evangelista Jimenez |
-| Matrícula | 2025-1232 |
-| Período | C2 2026 |
-| Maestro | Francis Ramirez |
-| Entregable | Carga de la base de datos transaccional |
-| Proyecto seleccionado | Sistema de Análisis de Ventas |
-
 ## Descripción
 
 Aplicación que implementa un proceso **ETL (Extract, Transform, Load)** encargado de leer información desde archivos CSV, validar su estructura y contenido, transformar los datos cuando es necesario, y cargarlos en una base de datos transaccional SQL Server, respetando las relaciones e integridad referencial del modelo relacional.
@@ -101,12 +89,12 @@ Leídas: 15 | Ordenes creadas: 8 | Líneas insertadas: 9 | Rechazadas: 6
 
 ## Validaciones implementadas
 
-- ✅ Formato correcto de los datos
-- ✅ Campos obligatorios
-- ✅ Tipos de datos válidos
-- ✅ Registros duplicados (dentro del archivo y contra la base de datos)
-- ✅ Integridad referencial (cliente/producto existente)
-- ✅ Manejo de errores mediante excepciones
+-  Formato correcto de los datos
+-  Campos obligatorios
+-  Tipos de datos válidos
+-  Registros duplicados (dentro del archivo y contra la base de datos)
+-  Integridad referencial (cliente/producto existente)
+-  Manejo de errores mediante excepciones
 
 ## Consultas de validación de integridad referencial
 
